@@ -37,12 +37,12 @@ class Test_Column(unittest.TestCase):
 
     def test_check_win(self):
 
-        #create winning column for player2 and check that win is returned:
+        #create winning column for player2 and check that True is returned:
         self.column1 = ClassLibrary.Column(2, self._column_height, self._win_length)
         self.column1.add_counter(self.player1)
         for i in range(self._win_length):
             self.column1.add_counter(self.player2)
-        self.assertEqual(self.column1.check_win(), self.player2)
+        self.assertTrue(self.column1.check_win())
 
         #create full, non-winning column and check that win is not returned:
         self.column1 = ClassLibrary.Column(2, self._column_height, self._win_length)

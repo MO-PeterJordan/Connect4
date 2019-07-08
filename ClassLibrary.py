@@ -20,6 +20,11 @@ class Column:
         return self._slots
 
     def add_counter(self, player):
+        '''
+        Adds counter to the column if not already full. Returns true if succeeded.
+        :param player:
+        :return:
+        '''
         #Check that this column isn't already full
         success = False
         if self._no_counters >= self._height:
@@ -33,12 +38,10 @@ class Column:
 
     def check_win(self):
         """
-        Checks if the column contains a win.
-        If win found, returns winning player.
-        If no winner returns false.
+        Checks if the column contains a win. If so returns True, else false.
         :return:
         """
-        winner = False
+        game_won = False
         current_winner = None
         row_length = 0
         for slot in self._slots:
@@ -55,10 +58,10 @@ class Column:
                     row_length = 1
             #Check for winner
             if row_length == self._win_length:
-                winner = current_winner
+                game_won = True
                 break
 
-        return winner
+        return game_won
 
 
 class Player:
@@ -138,7 +141,7 @@ class Board_State:
             #Player selected valid column
             chosen_column = self._cols[column_no-1]  # Column labels 1-indexed whereas array is 0-indexed
             success = chosen_column.add_counter(player)
-            if chosen_column.check_win() != False:
+            if chosen_column.check_win():
                 print(player.get_name(), "wins!")
                 self._game_ended = True
             else:
