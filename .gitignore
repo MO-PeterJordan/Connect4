@@ -1,0 +1,4 @@
+# Don't track .iml file containing intellij meta data
+ConnectFour5.iml
+
+.idea/*
