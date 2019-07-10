@@ -1,5 +1,6 @@
 import unittest
 import ClassLibrary
+import ColumnClass
 
 
 class Test_Column(unittest.TestCase):
@@ -163,21 +164,21 @@ class Test_Board_State(unittest.TestCase):
         for i in range(self._board_width):
             self.assertEqual(self.board._cols[i]._height, self._board_height)
 
-    def test_create_rows(self):
-        self.board = ClassLibrary.Board_State(self._board_width, self._board_height, self._win_number)
-        self.board._create_rows()
-        self.assertEqual(len(self.board._rows), self._board_height)
-        self.assertIsInstance(self.board._rows[0], ClassLibrary.Row)
-        for i in range(self._board_width):
-            self.assertEqual(self.board._rows[i]._lenght, self._board_width)
-
-    def test_create_diagonals(self):
-        self.board = ClassLibrary.Board_State(self._board_width, self._board_height, self._win_number)
-        self.board._create_diagonals()
-        #Check that there are the correct number of diagonals:
-        self.assertEqual(len(self.board._diagonals), 2*(self._board_width-3 + self._board_height-3 + 1))
-        #Check that lengths of diagonals are correct:
-        #TODO: implement
+    # def test_create_rows(self):
+    #     self.board = ClassLibrary.Board_State(self._board_width, self._board_height, self._win_number)
+    #     self.board._create_rows()
+    #     self.assertEqual(len(self.board._rows), self._board_height)
+    #     self.assertIsInstance(self.board._rows[0], ClassLibrary.Row)
+    #     for i in range(self._board_width):
+    #         self.assertEqual(self.board._rows[i]._lenght, self._board_width)
+    #
+    # def test_create_diagonals(self):
+    #     self.board = ClassLibrary.Board_State(self._board_width, self._board_height, self._win_number)
+    #     self.board._create_diagonals()
+    #     #Check that there are the correct number of diagonals:
+    #     self.assertEqual(len(self.board._diagonals), 2*(self._board_width-3 + self._board_height-3 + 1))
+    #     #Check that lengths of diagonals are correct:
+    #     #TODO: implement
 
     def test_insert_counter(self):
         self.board = ClassLibrary.Board_State(self._board_width, self._board_height, self._win_number)
@@ -216,10 +217,10 @@ class Test_Board_State(unittest.TestCase):
         #Check column wins:
         #create winning column for player2 and check that True is returned:
         self.board = ClassLibrary.Board_State(self._board_width, self._board_height, self._win_number)
-        self.column1 = ClassLibrary.Column(2, self._board_height, self._win_number)
-        self.column1.add_counter(self.player1)
+        self.board.column1 = ClassLibrary.Column(2, self._board_height, self._win_number)
+        self.board.column1.add_counter(self.player1)
         for i in range(self._win_number):
-            self.column1.add_counter(self.player2)
+            self.board.column1.add_counter(self.player2)
         self.assertTrue(self.board.game_won())
 
         #create full, non-winning column and check that win is not returned:
