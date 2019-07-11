@@ -100,16 +100,16 @@ class Board_State:
         for x in range(self._board_width):
             diagonals.append(np.diagonal(game_board, x))
         #Diagonals starting from left of board
-        for y in range(-1, -self._board_height): #starting at -1 avoids double counting the diagonal starting in the top left.
+        for y in range(-self._board_height+1, 0):
             diagonals.append(np.diagonal(game_board, y))
 
         #Rising diagonals - flip the board and repeat process for falling diagonals:
-        game_board = np.flip(game_board)
+        game_board = np.fliplr(game_board)
         #Diagonals starting from top of flipped board
         for x in range(self._board_width):
             diagonals.append(np.diagonal(game_board, x))
         #Diagonals starting from left of flipped board
-        for y in range(-1, -self._board_height): #starting at -1 avoids double counting the diagonal starting in the top left.
+        for y in range(-self._board_height+1, 0):
             diagonals.append(np.diagonal(game_board, y))
 
         return diagonals
@@ -174,3 +174,6 @@ class Board_State:
         _base += "-"
         print(_base)
         print(_indices)
+
+
+#class GameWon
