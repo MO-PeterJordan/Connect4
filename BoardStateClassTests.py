@@ -1,103 +1,7 @@
 import unittest
 from ColumnClass import Column
-from SlotClass import Slot
 from PlayerClass import Player
 from BoardStateClass import Board_State
-from GameClass import Game
-
-
-
-class Test_Column(unittest.TestCase):
-
-    def setUp(self):
-        self._column_height = 10
-        self._win_length = 4
-        self.column1 = Column(2, self._column_height, self._win_length)
-        self.player1 = Player("Jarvis", "yellow")
-        self.player2 = Player("Ultron", "red")
-
-    def test_create_slots(self):
-        self.assertEqual(len(self.column1._slots), self.column1._height)
-        self.assertIsInstance(self.column1._slots[0], Slot)
-
-    def test_get_slots(self):
-        slots = self.column1.get_slots()
-        self.assertEqual(len(slots), self.column1._height)
-        self.assertIsInstance(slots[0], Slot)
-
-    def test_is_full(self):
-        #Fill column slot by slot. Check is_full returns false until final slot is filled:
-        self.column1 = Column(2, self._column_height, self._win_length)
-        for i in range(self._column_height-1):
-            self.column1.add_counter(self.player1)
-            self.assertFalse(self.column1.is_full())
-        self.column1.add_counter(self.player1)
-        self.assertTrue(self.column1.is_full())
-
-    def test_add_counter(self):
-        #Check that counter is added to lowest available slot
-        self.column1 = Column(2, self._column_height, self._win_length)
-        for i in range(self._column_height):
-            self.success = self.column1.add_counter(self.player1)
-            self.assertTrue(self.success)
-
-            self.assertEqual(self.column1._slots[i]._owner, self.player1)
-            if i < self._column_height-1:
-                self.assertEqual(self.column1._slots[i+1]._owner, None)
-
-        #Check that counters not added when column is full
-        self.success = self.column1.add_counter(self.player1)
-        self.assertFalse(self.success)
-        self.assertTrue(len(self.column1._slots), self._column_height) #Check haven't added extra row.
-
-
-class TestPlayer(unittest.TestCase):
-
-    def setUp(self):
-        self.player = Player("Geraldine", "red")
-
-    def test_check_get_name_is_Geraldine(self):
-        self.assertEqual(self.player.get_name(), "Geraldine")
-
-    def test_check_get_colour_is_red(self):
-        self.assertEqual(self.player.get_colour(), "red")
-
-    def test_is_it_my_turn_initially_is_false(self):
-        self.assertFalse(self.player.is_it_my_turn())
-
-    def test_swap_turn(self):
-        my_turn_pre_swap = self.player._myTurn
-        self.player.swapTurn()
-        if(my_turn_pre_swap == True):
-            self.assertFalse(self.player._myTurn)
-        elif(my_turn_pre_swap == False):
-            self.assertTrue(self.player._myTurn)
-        else:
-            print("_myTurn property of player is non boolean")
-            self.fail()
-
-    # def tearDown(self):
-    #         self.player.dispose()
-
-
-class TestSlot(unittest.TestCase):
-
-    def setUp(self):
-        self.slot1 = Slot()
-        self.slot2 = Slot()
-        self.player = Player("Geraldine", "Red")
-        self.slot2.assign_owner(self.player)
-
-    def test_get_owner_no_owner(self):
-        self.assertEqual(self.slot1.get_owner(), None)
-
-    def test_get_owner_Geraldine(self):
-        self.assertEqual(self.slot2.get_owner(), self.player)
-
-    # def tearDown(self):
-    #     self.slot1.dispose()
-    #     self.slot2.dispose()
-    #     self.player.dispose()
 
 
 class Test_Board_State(unittest.TestCase):
@@ -129,7 +33,7 @@ class Test_Board_State(unittest.TestCase):
         self.board = Board_State(self._board_width, self._board_height, self._win_number)
         #print(self.board._cols[0]._slots[0]._owner)
         #Fill up column 1
-        for i in range(self._board_height):
+        for _ in range(self._board_height):
             self.assertTrue(self.board.insert_counter(1, self.player1))
         #Check that column 1 can no longer be added to:
         self.assertFalse(self.board.insert_counter(1, self.player1))
@@ -138,7 +42,7 @@ class Test_Board_State(unittest.TestCase):
         #Create a simple 3x3 board and check that all diagonals are returned:
         self.board = Board_State(3, 3, 4)
         #Board has first column owned by player1 others owned by player2
-        for i in range(3):
+        for _ in range(3):
             self.board.insert_counter(1, self.player1)
             self.board.insert_counter(2, self.player2)
             self.board.insert_counter(3, self.player2)
@@ -151,7 +55,7 @@ class Test_Board_State(unittest.TestCase):
         #Create winning column for player2 and check that True is returned:
         self.board = Board_State(self._board_width, self._board_height, self._win_number)
         self.board.insert_counter(1, self.player1)
-        for i in range(self._win_number):
+        for _ in range(self._win_number):
             self.board.insert_counter(1, self.player2)
             self.board.draw_board()
         self.assertTrue(self.board.game_won())
@@ -159,7 +63,7 @@ class Test_Board_State(unittest.TestCase):
     def test_game_won_vertical_full_column_no_win(self):
         #create full, non-winning column and check that win is not returned:
         self.board = Board_State(self._board_width, self._board_height, self._win_number)
-        for i in range(self._board_height):
+        for _ in range(self._board_height):
             self.board.insert_counter(1, self.player1)
             self.board.insert_counter(1, self.player2)
         self.assertFalse(self.board.game_won())
@@ -167,7 +71,7 @@ class Test_Board_State(unittest.TestCase):
     def test_game_won_vertical_3_in_a_row_no_win(self):
         #Create a column in which both players have 3 in a row and check that no win occurs:
         self.board = Board_State(self._board_width, self._board_height, 4)
-        for i in range(self._win_number - 1):
+        for _ in range(self._win_number - 1):
             self.board.insert_counter(1, self.player1)
             self.board.insert_counter(1, self.player2)
         self.assertFalse(self.board.game_won())
@@ -253,12 +157,4 @@ class Test_Board_State(unittest.TestCase):
         self.board.draw_board()
         self.assertTrue(self.board.game_drawn())
 
-
-
-    def test_draw_board(self):
-        pass #Hard to test as output is visual.
-
-
-if __name__ == '__main__':
-    unittest.main()
 
